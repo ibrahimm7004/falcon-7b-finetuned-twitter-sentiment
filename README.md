@@ -156,12 +156,12 @@ print(response)
 ### Example Output:
 Input:
 ```
-### Human: yayyyy thats amazing broo
+### Human: WMT down more than 7% premarket, and nearly 15% over the past month. Now almost on par with the drop of $COST during a similar period. If I'm choosing one of these to play, it is $COST. On watch.
 ### Assistant:
 ```
 Output:
 ```
-Positive
+Negative
 ```
 
 ---
