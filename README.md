@@ -1,3 +1,23 @@
+# Falcon-7B Finetuned for Twitter Sentiment Analysis
+
+## Overview
+
+This project demonstrates how I fine-tuned the `ybelkada/falcon-7b-sharded-bf16` version of the Falcon-7B model for sentiment analysis of tweets. The fine-tuned model is available on Hugging Face and can predict positive or negative sentiments from social media posts, specifically those related to publicly traded stocks.
+
+Model on Hugging Face: [ibrahim7004/falcon-7b-finetuned-twitter](https://huggingface.co/ibrahim7004/falcon-7b-finetuned-twitter)
+Google Colab Notebook of the Complete Code: [Google Colab Notebook](https://colab.research.google.com/drive/1-5FMvszfBQiqlcKBYqssMLNsVIh0C4tw?usp=sharing).
+
+---
+
+## Dataset
+
+The fine-tuning process used the **Stock Sentiment Analysis Dataset** by Surge AI, a dataset of social media mentions of publicly traded stocks labeled as positive or negative.
+
+- Dataset source: [Surge AI Stock Sentiment](https://github.com/surge-ai/stock-sentiment/blob/main/sentiment.csv)
+- This dataset provides high-quality sentiment annotations for training AI models in financial contexts.
+
+---
+
 ## Fine-Tuning Process
 
 The fine-tuning process leveraged Hugging Face’s `transformers`, `trl`, and `peft` libraries. Below is a tutorial-like breakdown of the steps for fine-tuning.
