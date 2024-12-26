@@ -4,8 +4,8 @@
 
 This project demonstrates how I fine-tuned the `ybelkada/falcon-7b-sharded-bf16` version of the Falcon-7B model for sentiment analysis of tweets. The fine-tuned model is available on Hugging Face and can predict positive or negative sentiments from social media posts, specifically those related to publicly traded stocks.
 
-Model on Hugging Face: [ibrahim7004/falcon-7b-finetuned-twitter](https://huggingface.co/ibrahim7004/falcon-7b-finetuned-twitter)
-Google Colab Notebook of the Complete Code: [Google Colab Notebook](https://colab.research.google.com/drive/1-5FMvszfBQiqlcKBYqssMLNsVIh0C4tw?usp=sharing).
+- Model on Hugging Face: [ibrahim7004/falcon-7b-finetuned-twitter](https://huggingface.co/ibrahim7004/falcon-7b-finetuned-twitter)
+- Google Colab Notebook of the Complete Code: [Google Colab Notebook](https://colab.research.google.com/drive/1-5FMvszfBQiqlcKBYqssMLNsVIh0C4tw?usp=sharing).
 
 ---
 
