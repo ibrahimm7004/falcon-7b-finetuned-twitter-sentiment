@@ -19,29 +19,32 @@ The fine-tuning process used the **Stock Sentiment Analysis Dataset** by Surge A
 
 ## Fine-Tuning Process
 
-The fine-tuning process leveraged Hugging Face’s `transformers`, `trl`, and `peft` libraries. The model was trained using low-rank adaptation (LoRA) with quantization for optimized performance on GPUs. Below is the key code used for fine-tuning.
+You can also access the complete code in this Google Colab Notebook.
 
-### Libraries Installed:
-```bash
+The fine-tuning process leveraged Hugging Face’s transformers, trl, and peft libraries. Below is a tutorial-like breakdown of the steps for fine-tuning.
+
+1. Install Required Libraries
+
 !pip install -q -U trl transformers accelerate git+https://github.com/huggingface/peft.git
 !pip install -q datasets bitsandbytes einops wandb
-```
 
-### Code:
-```python
+2. Load and Prepare the Dataset
+
 from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import LoraConfig
-from trl import SFTTrainer, SFTConfig, get_kbit_device_map, get_quantization_config, ModelConfig
 
-# Load the dataset
 total_dataset = load_dataset("json", data_files="tweets_human_assistant_fixed.json")["train"]
 split_dataset = total_dataset.train_test_split(test_size=0.2, seed=42)
 train_dataset = split_dataset["train"]
 test_dataset = split_dataset["test"]
 
-# Define model and tokenizer
+3. Configure the Model
+
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig
+from trl import get_kbit_device_map, get_quantization_config, ModelConfig
+
 model_name = "ybelkada/falcon-7b-sharded-bf16"
+
 model_args = ModelConfig(
     model_name_or_path=model_name,
     load_in_4bit=True,
@@ -57,11 +60,12 @@ model = AutoModelForCausalLM.from_pretrained(
     use_cache=False,  # Required for gradient checkpointing
 )
 
-# Tokenizer
+# Tokenizer setup
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token
 
-# LoRA configuration
+4. Set Up LoRA Configuration
+
 peft_config = LoraConfig(
     r=16,  # Low-rank adaptation parameter
     lora_alpha=32,  # Scaling factor
@@ -71,7 +75,10 @@ peft_config = LoraConfig(
     target_modules=["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],  # Target Falcon layers
 )
 
-# Training arguments
+5. Define Training Arguments
+
+from trl import SFTConfig
+
 training_args = SFTConfig(
     output_dir="./results",
     max_seq_length=256,
@@ -87,6 +94,10 @@ training_args = SFTConfig(
     gradient_checkpointing=True,
 )
 
+6. Train the Model
+
+from trl import SFTTrainer
+
 trainer = SFTTrainer(
     model=model,
     train_dataset=train_dataset,
@@ -96,12 +107,9 @@ trainer = SFTTrainer(
     peft_config=peft_config,
 )
 
-# Train the model
 trainer.train()
 
-# Save the model
-trainer.save_model("./results")
-```
+7. Save the Fine-Tuned Model
 
 ---
 
