@@ -1,44 +1,27 @@
-# Falcon-7B Finetuned for Twitter Sentiment Analysis
-
-## Overview
-
-This project demonstrates how I fine-tuned the `ybelkada/falcon-7b-sharded-bf16` version of the Falcon-7B model for sentiment analysis of tweets. The fine-tuned model is available on Hugging Face and can predict positive or negative sentiments from social media posts, specifically those related to publicly traded stocks.
-
-Model on Hugging Face: [ibrahim7004/falcon-7b-finetuned-twitter](https://huggingface.co/ibrahim7004/falcon-7b-finetuned-twitter)
-
----
-
-## Dataset
-
-The fine-tuning process used the **Stock Sentiment Analysis Dataset** by Surge AI, a dataset of social media mentions of publicly traded stocks labeled as positive or negative.
-
-- Dataset source: [Surge AI Stock Sentiment](https://github.com/surge-ai/stock-sentiment/blob/main/sentiment.csv)
-- This dataset provides high-quality sentiment annotations for training AI models in financial contexts.
-
----
-
 ## Fine-Tuning Process
 
-You can also access the complete code in this Google Colab Notebook.
+The fine-tuning process leveraged Hugging Face’s `transformers`, `trl`, and `peft` libraries. Below is a tutorial-like breakdown of the steps for fine-tuning.
 
-The fine-tuning process leveraged Hugging Face’s transformers, trl, and peft libraries. Below is a tutorial-like breakdown of the steps for fine-tuning.
+You can also access the complete code in this [Google Colab Notebook](https://colab.research.google.com/drive/1-5FMvszfBQiqlcKBYqssMLNsVIh0C4tw?usp=sharing).
 
-1. Install Required Libraries
-
+### 1. Install Required Libraries
+```bash
 !pip install -q -U trl transformers accelerate git+https://github.com/huggingface/peft.git
 !pip install -q datasets bitsandbytes einops wandb
+```
 
-2. Load and Prepare the Dataset
-
+### 2. Load and Prepare the Dataset
+```python
 from datasets import load_dataset
 
 total_dataset = load_dataset("json", data_files="tweets_human_assistant_fixed.json")["train"]
 split_dataset = total_dataset.train_test_split(test_size=0.2, seed=42)
 train_dataset = split_dataset["train"]
 test_dataset = split_dataset["test"]
+```
 
-3. Configure the Model
-
+### 3. Configure the Model
+```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig
 from trl import get_kbit_device_map, get_quantization_config, ModelConfig
@@ -63,9 +46,10 @@ model = AutoModelForCausalLM.from_pretrained(
 # Tokenizer setup
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token
+```
 
-4. Set Up LoRA Configuration
-
+### 4. Set Up LoRA Configuration
+```python
 peft_config = LoraConfig(
     r=16,  # Low-rank adaptation parameter
     lora_alpha=32,  # Scaling factor
@@ -74,9 +58,10 @@ peft_config = LoraConfig(
     task_type="CAUSAL_LM",  # Fine-tuning for causal language modeling
     target_modules=["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],  # Target Falcon layers
 )
+```
 
-5. Define Training Arguments
-
+### 5. Define Training Arguments
+```python
 from trl import SFTConfig
 
 training_args = SFTConfig(
@@ -93,9 +78,10 @@ training_args = SFTConfig(
     fp16=True,
     gradient_checkpointing=True,
 )
+```
 
-6. Train the Model
-
+### 6. Train the Model
+```python
 from trl import SFTTrainer
 
 trainer = SFTTrainer(
@@ -108,8 +94,12 @@ trainer = SFTTrainer(
 )
 
 trainer.train()
+```
 
-7. Save the Fine-Tuned Model
+### 7. Save the Fine-Tuned Model
+```python
+trainer.save_model("./results")
+```
 
 ---
 
