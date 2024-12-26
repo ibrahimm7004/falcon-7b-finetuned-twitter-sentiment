@@ -7,7 +7,8 @@ pipeline_tag: text-generation
 
 <!-- Provide a quick summary of what the model is/does. -->
 
-
+# Model available on HuggingFace:
+https://huggingface.co/ibrahim7004/falcon-7b-finetuned-twitter
 
 ## Model Details
 
