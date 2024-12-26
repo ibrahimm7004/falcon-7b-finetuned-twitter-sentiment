@@ -1,0 +1,243 @@
+/* General body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #161b22;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
+}
+
+/* Layout styling */
+.app-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Card styling */
+.content-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* GIF container for hover effect */
+.gif-container {
+    overflow: hidden;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.gif-container:hover {
+    transform: scale(1.05);
+}
+
+/* GIF styling */
+.gif {
+    width: 100%;
+    height: auto;
+}
+
+/* Button styling */
+.modern-button {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    text-transform: uppercase;
+}
+
+.modern-button:hover {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
+    transform: translateY(-3px);
+}
+
+.modern-button:active {
+    transform: scale(0.95);
+}
+
+/* Input field styling */
+.input-field {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.input-field:focus {
+    border: 1px solid #2563eb;
+    box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+}
+
+/* Tweets container styling */
+.tweets-container {
+    margin-top: 20px;
+    text-align: left;
+    color: white;
+}
+
+.tweets-container h3 {
+    margin-bottom: 10px;
+}
+
+.tweets-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tweets-container li {
+    background-color: rgba(255, 255, 255, 0.05);
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Styling for the DataFrame table */
+.dataframe {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+    color: white;
+}
+
+.dataframe thead {
+    background-color: #2563eb;
+    color: white;
+    font-weight: bold;
+}
+
+.dataframe th,
+.dataframe td {
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dataframe tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dataframe tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Table container for scrolling */
+.table-container {
+    max-height: 400px; /* Limit the visible height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Styling for the DataFrame table */
+.dataframe {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 14px; /* Reduce font size */
+    text-align: left;
+    color: white;
+}
+
+.dataframe thead {
+    background-color: #2563eb;
+    color: white;
+    font-weight: bold;
+}
+
+.dataframe th,
+.dataframe td {
+    padding: 8px; /* Reduce padding for smaller table size */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dataframe tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dataframe tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Card styling (adjust width to fit the table) */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 800px; /* Limit card width to fit smaller screens */
+    margin: 0 auto;
+}
+
+/* Back button styling */
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #444;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #333;
+}
+
+.back-button:active {
+    background-color: #222;
+}
+
+
+/* Responsiveness */
+@media screen and (max-width: 768px) {
+    .content-card {
+        width: 90%;
+        padding: 30px;
+    }
+
+    .gif {
+        width: 80%;
+    }
+
+    .modern-button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen 1</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #161b22;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .app-layout {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            width: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gif-container {
+            width: 100%; /* Make the GIF container span the full width of the card */
+            height: 250px; /* Set a fixed height */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%; /* Ensure the GIF spans the width of the container */
+            height: 100%; /* Ensure the GIF spans the height */
+            object-fit: cover; /* Crop the GIF to fit the container while preserving its aspect ratio */
+        }
+
+        .modern-button {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            text-transform: uppercase;
+        }
+
+        .modern-button:hover {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .modern-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <div class="content-card">
+            <div class="gif-container">
+                <img src="{{ url_for('static', filename='seven.gif') }}" alt="What's in the Box?" class="gif">
+            </div>
+            <button onclick="window.location.href='{{ url_for('screen2') }}'" class="modern-button">
+                What's in the Box?
+            </button>
+        </div>
+    </div>
+</body>
+</html>
