@@ -1,194 +1,199 @@
-# Falcon-7B Finetuned for Twitter Sentiment Analysis
-
-## Overview
-
-This project demonstrates how I fine-tuned the `ybelkada/falcon-7b-sharded-bf16` version of the Falcon-7B model for sentiment analysis of tweets. The fine-tuned model is available on Hugging Face and can predict positive or negative sentiments from social media posts, specifically those related to publicly traded stocks.
-
-- Model on Hugging Face: [ibrahim7004/falcon-7b-finetuned-twitter](https://huggingface.co/ibrahim7004/falcon-7b-finetuned-twitter)
-- Google Colab Notebook of the Complete Code: [Google Colab Notebook](https://colab.research.google.com/drive/1-5FMvszfBQiqlcKBYqssMLNsVIh0C4tw?usp=sharing).
-
+---
+library_name: transformers
+pipeline_tag: text-generation
 ---
 
-## Dataset
+# Model Card for Model ID
 
-The fine-tuning process used the **Stock Sentiment Analysis Dataset** by Surge AI, a dataset of social media mentions of publicly traded stocks labeled as positive or negative.
+<!-- Provide a quick summary of what the model is/does. -->
 
-- Dataset source: [Surge AI Stock Sentiment](https://github.com/surge-ai/stock-sentiment/blob/main/sentiment.csv)
-- This dataset provides high-quality sentiment annotations for training AI models in financial contexts.
 
----
 
-## Fine-Tuning Process
+## Model Details
 
-The fine-tuning process leveraged Hugging Face’s `transformers`, `trl`, and `peft` libraries. Below is a tutorial-like breakdown of the steps for fine-tuning.
+### Model Description
 
-You can also access the complete code in this [Google Colab Notebook](https://colab.research.google.com/drive/1-5FMvszfBQiqlcKBYqssMLNsVIh0C4tw?usp=sharing).
+<!-- Provide a longer summary of what this model is. -->
 
-### 1. Install Required Libraries
-```bash
-!pip install -q -U trl transformers accelerate git+https://github.com/huggingface/peft.git
-!pip install -q datasets bitsandbytes einops wandb
-```
+This is the model card of a 🤗 transformers model that has been pushed on the Hub. This model card has been automatically generated.
 
-### 2. Load and Prepare the Dataset
-```python
-from datasets import load_dataset
+- **Developed by:** [More Information Needed]
+- **Funded by [optional]:** [More Information Needed]
+- **Shared by [optional]:** [More Information Needed]
+- **Model type:** [More Information Needed]
+- **Language(s) (NLP):** [More Information Needed]
+- **License:** [More Information Needed]
+- **Finetuned from model [optional]:** [More Information Needed]
 
-total_dataset = load_dataset("json", data_files="tweets_human_assistant_fixed.json")["train"]
-split_dataset = total_dataset.train_test_split(test_size=0.2, seed=42)
-train_dataset = split_dataset["train"]
-test_dataset = split_dataset["test"]
-```
+### Model Sources [optional]
 
-### 3. Configure the Model
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import LoraConfig
-from trl import get_kbit_device_map, get_quantization_config, ModelConfig
+<!-- Provide the basic links for the model. -->
 
-model_name = "ybelkada/falcon-7b-sharded-bf16"
+- **Repository:** [More Information Needed]
+- **Paper [optional]:** [More Information Needed]
+- **Demo [optional]:** [More Information Needed]
 
-model_args = ModelConfig(
-    model_name_or_path=model_name,
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",  # normal float 4
-)
+## Uses
 
-quantization_config = get_quantization_config(model_args)
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    trust_remote_code=True,
-    quantization_config=quantization_config,
-    device_map=get_kbit_device_map(),
-    use_cache=False,  # Required for gradient checkpointing
-)
+<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
 
-# Tokenizer setup
-tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-tokenizer.pad_token = tokenizer.eos_token
-```
+### Direct Use
 
-### 4. Set Up LoRA Configuration
-```python
-peft_config = LoraConfig(
-    r=16,  # Low-rank adaptation parameter
-    lora_alpha=32,  # Scaling factor
-    lora_dropout=0.05,  # Dropout rate for LoRA
-    bias="none",  # No bias tuning
-    task_type="CAUSAL_LM",  # Fine-tuning for causal language modeling
-    target_modules=["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],  # Target Falcon layers
-)
-```
+<!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
 
-### 5. Define Training Arguments
-```python
-from trl import SFTConfig
+[More Information Needed]
 
-training_args = SFTConfig(
-    output_dir="./results",
-    max_seq_length=256,
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,
-    learning_rate=2e-4,
-    max_steps=200,
-    num_train_epochs=5,
-    warmup_ratio=0.03,
-    save_steps=10,
-    logging_steps=10,
-    fp16=True,
-    gradient_checkpointing=True,
-)
-```
+### Downstream Use [optional]
 
-### 6. Train the Model
-```python
-from trl import SFTTrainer
+<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
 
-trainer = SFTTrainer(
-    model=model,
-    train_dataset=train_dataset,
-    eval_dataset=test_dataset,
-    tokenizer=tokenizer,
-    args=training_args,
-    peft_config=peft_config,
-)
+[More Information Needed]
 
-trainer.train()
-```
+### Out-of-Scope Use
 
-### 7. Save the Fine-Tuned Model
-```python
-trainer.save_model("./results")
-```
+<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
 
----
+[More Information Needed]
 
-## Model Usage
+## Bias, Risks, and Limitations
 
-The fine-tuned model predicts sentiments in a conversational format. Here’s an example of how to generate predictions:
+<!-- This section is meant to convey both technical and sociotechnical limitations. -->
 
-### Predicting Sentiment:
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
+[More Information Needed]
 
-model = AutoModelForCausalLM.from_pretrained("ibrahim7004/falcon-7b-finetuned-twitter", trust_remote_code=True)
-tokenizer = AutoTokenizer.from_pretrained("ibrahim7004/falcon-7b-finetuned-twitter", trust_remote_code=True)
+### Recommendations
 
-input_text = "### Human: yayyyy thats amazing broo\n### Assistant:"
-inputs = tokenizer(input_text, return_tensors="pt")
-inputs.pop("token_type_ids", None)
+<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
 
-outputs = model.generate(
-    **inputs,
-    max_new_tokens=1,
-    num_return_sequences=1,
-    repetition_penalty=2.0,
-    temperature=0.7,
-    top_k=2,
-    top_p=0.95,
-)
+Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
 
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-response = response.split("### Assistant:")[1].strip()  # Extract sentiment
-print(response)
-```
+## How to Get Started with the Model
 
-### Example Output:
-Input:
-```
-### Human: WMT down more than 7% premarket, and nearly 15% over the past month. Now almost on par with the drop of $COST during a similar period. If I'm choosing one of these to play, it is $COST. On watch.
-### Assistant:
-```
-Output:
-```
-Negative
-```
+Use the code below to get started with the model.
 
----
+[More Information Needed]
 
-## Loading the Model
+## Training Details
 
-To load the model and tokenizer using the Hugging Face `transformers` library, use the following code:
+### Training Data
 
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
+<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
 
-model = AutoModelForCausalLM.from_pretrained("ibrahim7004/falcon-7b-finetuned-twitter", trust_remote_code=True)
-tokenizer = AutoTokenizer.from_pretrained("ibrahim7004/falcon-7b-finetuned-twitter", trust_remote_code=True)
-```
+[More Information Needed]
 
----
+### Training Procedure
 
-## Key Features
-- **Model**: Falcon-7B fine-tuned for sentiment classification.
-- **Dataset**: Stock Sentiment Dataset from Surge AI.
-- **Training**: LoRA-based fine-tuning with 4-bit quantization for efficient training.
-- **Inference**: Predicts positive or negative sentiment with a conversational input-output format.
+<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
 
----
+#### Preprocessing [optional]
 
-## References
-- Hugging Face Transformers: [https://huggingface.co/docs/transformers/](https://huggingface.co/docs/transformers/)
-- Original Falcon Model: [ybelkada/falcon-7b-sharded-bf16](https://huggingface.co/ybelkada/falcon-7b-sharded-bf16)
-- Stock Sentiment Dataset: [https://github.com/surge-ai/stock-sentiment/blob/main/sentiment.csv](https://github.com/surge-ai/stock-sentiment/blob/main/sentiment.csv)
+[More Information Needed]
 
+
+#### Training Hyperparameters
+
+- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
+
+#### Speeds, Sizes, Times [optional]
+
+<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
+
+[More Information Needed]
+
+## Evaluation
+
+<!-- This section describes the evaluation protocols and provides the results. -->
+
+### Testing Data, Factors & Metrics
+
+#### Testing Data
+
+<!-- This should link to a Dataset Card if possible. -->
+
+[More Information Needed]
+
+#### Factors
+
+<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
+
+[More Information Needed]
+
+#### Metrics
+
+<!-- These are the evaluation metrics being used, ideally with a description of why. -->
+
+[More Information Needed]
+
+### Results
+
+[More Information Needed]
+
+#### Summary
+
+
+
+## Model Examination [optional]
+
+<!-- Relevant interpretability work for the model goes here -->
+
+[More Information Needed]
+
+## Environmental Impact
+
+<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
+
+Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
+
+- **Hardware Type:** [More Information Needed]
+- **Hours used:** [More Information Needed]
+- **Cloud Provider:** [More Information Needed]
+- **Compute Region:** [More Information Needed]
+- **Carbon Emitted:** [More Information Needed]
+
+## Technical Specifications [optional]
+
+### Model Architecture and Objective
+
+[More Information Needed]
+
+### Compute Infrastructure
+
+[More Information Needed]
+
+#### Hardware
+
+[More Information Needed]
+
+#### Software
+
+[More Information Needed]
+
+## Citation [optional]
+
+<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
+
+**BibTeX:**
+
+[More Information Needed]
+
+**APA:**
+
+[More Information Needed]
+
+## Glossary [optional]
+
+<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
+
+[More Information Needed]
+
+## More Information [optional]
+
+[More Information Needed]
+
+## Model Card Authors [optional]
+
+[More Information Needed]
+
+## Model Card Contact
+
+[More Information Needed]
